@@ -36,29 +36,43 @@
             font-variant-numeric: tabular-nums;
         }
 
-        .buttons {
+        /* Контейнер для кнопок: 3 в ряд, Сброс внизу */
+        .buttons-wrapper {
             display: flex;
+            flex-direction: column;
             gap: 10px;
+            width: 90%;
             margin-bottom: 20px;
         }
 
+        .top-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+        }
+
         button {
-            padding: 10px 20px;
+            padding: 12px 5px;
             border: none;
             border-radius: 12px;
             font-weight: 600;
             cursor: pointer;
             background: #ff9500;
             color: #000;
-            /* ЧЕРНЫЙ ТЕКСТ */
         }
 
-        /* Кнопки: Стоп и Сброс (Черный фон, оранжевый текст) */
-        button:nth-child(2),
-        button:nth-child(4) {
+        /* Кнопка сброс - растянутая */
+        .reset-btn {
+            width: 100%;
             background: #000;
             color: #ff9500;
-            /* ОРАНЖЕВЫЙ ТЕКСТ */
+            border: 1px solid #ff9500;
+        }
+
+        /* Стоп - тоже черный */
+        .stop-btn {
+            background: #000;
+            color: #ff9500;
             border: 1px solid #ff9500;
         }
 
@@ -82,13 +96,14 @@
 <body>
     <h1>Easy Timer</h1>
     <div id="timer">00:00:00.0</div>
-    <div class="buttons">
-        <button onclick="start()">Старт</button>
-        <button onclick="stop()">Стоп</button>
-        <button onclick="lap()">Круг</button>
-        <button onclick="reset()">Сброс</button>
+    <div class="buttons-wrapper">
+        <div class="top-row">
+            <button onclick="start()">Старт</button>
+            <button onclick="stop()" class="stop-btn">Стоп</button>
+            <button onclick="lap()">Круг</button>
+        </div>
+        <button onclick="reset()" class="reset-btn">Сброс</button>
     </div>
-    <div id="laps"></div>
 
     <script>
         let ms = 0, timer;
@@ -101,22 +116,37 @@
             display.innerText = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}.${mil}`;
         }
 
-        function start() { if (!timer) timer = setInterval(() => { ms++; updateDisplay(); }, 100); }
-        function stop() { clearInterval(timer); timer = null; }
-        function reset() { stop(); ms = 0; updateDisplay(); lapsContainer.innerHTML = ''; }
+        function start() {
+            if (!timer) timer = setInterval(() => { ms++; updateDisplay(); }, 100);
+        }
+
+        function stop() {
+            clearInterval(timer);
+            timer = null;
+        }
+
+        function reset() {
+            stop();
+            ms = 0;
+            updateDisplay();
+            lapsContainer.innerHTML = '';
+            // Если вдруг окно открыто, закрываем его при сбросе
+            modal.style.display = 'none';
+        }
 
         function lap() {
             let count = lapsContainer.children.length + 1;
 
-            // Логика для Pro-версии
-            if (count === 3) {
-                modal.style.display = 'flex';
-            }
-
+            // Сначала создаем запись круга
             let div = document.createElement('div');
             div.className = 'lap-item';
             div.innerHTML = `<span>Круг ${count}</span> <span>${display.innerText}</span>`;
             lapsContainer.prepend(div);
+
+            // Потом проверяем, нужно ли показать окно
+            if (count === 3) {
+                modal.style.display = 'flex';
+            }
         }
 
         function closeModal() {
