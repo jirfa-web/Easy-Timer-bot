@@ -49,11 +49,17 @@
             font-weight: 600;
             cursor: pointer;
             background: #ff9500;
+            color: #000;
+            /* ЧЕРНЫЙ ТЕКСТ */
         }
 
-        button:nth-child(2) {
-            background: #333;
-            color: white;
+        /* Кнопки: Стоп и Сброс (Черный фон, оранжевый текст) */
+        button:nth-child(2),
+        button:nth-child(4) {
+            background: #000;
+            color: #ff9500;
+            /* ОРАНЖЕВЫЙ ТЕКСТ */
+            border: 1px solid #ff9500;
         }
 
         #laps {
