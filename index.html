@@ -94,6 +94,7 @@
         let ms = 0, timer;
         const display = document.getElementById('timer');
         const lapsContainer = document.getElementById('laps');
+        const modal = document.getElementById('pro-modal');
 
         function updateDisplay() {
             let h = Math.floor(ms / 36000), m = Math.floor((ms % 36000) / 600), s = Math.floor((ms % 600) / 10), mil = ms % 10;
@@ -103,13 +104,37 @@
         function start() { if (!timer) timer = setInterval(() => { ms++; updateDisplay(); }, 100); }
         function stop() { clearInterval(timer); timer = null; }
         function reset() { stop(); ms = 0; updateDisplay(); lapsContainer.innerHTML = ''; }
+
         function lap() {
+            let count = lapsContainer.children.length + 1;
+
+            // Логика для Pro-версии
+            if (count === 3) {
+                modal.style.display = 'flex';
+            }
+
             let div = document.createElement('div');
             div.className = 'lap-item';
-            div.innerHTML = `<span>Круг ${lapsContainer.children.length + 1}</span> <span>${display.innerText}</span>`;
+            div.innerHTML = `<span>Круг ${count}</span> <span>${display.innerText}</span>`;
             lapsContainer.prepend(div);
         }
+
+        function closeModal() {
+            modal.style.display = 'none';
+        }
     </script>
+    <!-- Окно подписки -->
+    <div id="pro-modal"
+        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); flex-direction:column; align-items:center; justify-content:center; z-index:10;">
+        <h2 style="color:#ff9500;">Easy Timer PRO</h2>
+        <ul style="color:white; text-align:left;">
+            <li>✅ Неограниченное время</li>
+            <li>✅ Бесконечные круги</li>
+            <li>✅ Личное уважение от меня</li>
+        </ul>
+        <p style="font-size: 2rem; font-weight: bold;">$99/мес</p>
+        <button onclick="closeModal()">Купить за $99</button>
+    </div>
 </body>
 
 </html>
