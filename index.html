@@ -1,20 +1,64 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Таймер</title>
-    <!-- Подключаем Telegram Web App SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background-color: var(--tg-theme-bg-color); color: var(--tg-theme-text-color); }
-        #timer { font-size: 3rem; margin-bottom: 20px; }
-        button { padding: 10px 20px; font-size: 1rem; margin: 5px; cursor: pointer; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        #timer {
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+            color: #ff9500;
+            text-shadow: 0 0 20px rgba(255, 149, 0, 0.3);
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            border-radius: 15px;
+            background-color: #ff9500;
+            color: #000;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        button:active {
+            transform: scale(0.95);
+            background-color: #e08400;
+        }
+
+        button:nth-child(2) {
+            background-color: #333;
+            color: #fff;
+        }
     </style>
 </head>
+
 <body>
     <div id="timer">00:00:00</div>
-    <div>
+    <div class="button-container">
         <button onclick="start()">Старт</button>
         <button onclick="stop()">Стоп</button>
         <button onclick="reset()">Сброс</button>
@@ -30,10 +74,10 @@
             let secs = (seconds % 60).toString().padStart(2, '0');
             display.innerText = `${hrs}:${mins}:${secs}`;
         }
-
-        function start() { if(!timer) timer = setInterval(() => { seconds++; updateDisplay(); }, 1000); }
+        function start() { if (!timer) timer = setInterval(() => { seconds++; updateDisplay(); }, 1000); }
         function stop() { clearInterval(timer); timer = null; }
         function reset() { stop(); seconds = 0; updateDisplay(); }
     </script>
 </body>
+
 </html>
